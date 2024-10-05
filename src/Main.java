@@ -13,12 +13,12 @@ public class Main {
             }
         }
         max = array[0][0];
-        for(int i = 0; i < 9; i++){
+        for(int i = 0; i < 9; i++){             //최대값 찾기
             for(int j = 0; j < 9; j++){
-                if(max < array[i][j]){
+                if(max < array[i][j]){      //max가 배열에 들어있는 값보다 작으면 현재 배열값을 max에 넣음
                     max = array[i][j];
-                    x = i;
-                    y = j;
+                    x = i;      //최대값의 행
+                    y = j;      //최대값의 열
                 }
             }
         }
