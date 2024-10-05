@@ -23,6 +23,6 @@ public class Main {
             }
         }
         System.out.println(max);
-        System.out.print((x+1) + " " + (y+1));
+        System.out.print((x+1) + " " + (y+1)); //행, 열에 1울 더함g
     }
 }
