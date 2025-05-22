@@ -1,0 +1,91 @@
+import java.io.*;
+import java.util.*;
+
+class Node {
+    private int index;
+    private int distance;
+    //N번 노드에서 갈 수 있는 노드의 번호와 노드까지의 거리를 저장
+    public Node(int index, int distance){
+        this.index = index;
+        this.distance = distance;
+    }
+    public int getIndex(){
+        return this.index;
+    }
+    public int getDistance(){
+        return this.distance;
+    }
+}
+
+public class Dijkstra{
+    public static final int INF = (int)1e9; //무한을 의미하는 10억 설정
+    public static int n, m, start; //노드의 개수, 간선의 개수, 시작 노드
+    public static boolean[] visited = new boolean[10001];
+    public static int[] d = new int[10001];
+    public static ArrayList<ArrayList<Node>> graph = new ArrayList<ArrayList<Node>>();
+    public static int getSmallestNode(){
+        int min = INF;
+        int index = 0; //가장 간선의 크기가 작은 노드의 인덱스
+        for(int i = 1; i <= n; i++){
+            if(d[i] < min && !visited[i]){
+                min = d[i];
+                index = i;
+            }
+        }
+        System.out.println(index);
+        return index;
+    }
+
+    public static void dijkstra(int start){
+        //시작 노드에 대해 초기화
+        d[start] = 0;
+        visited[start] = true;
+        //시작 노드에서 갈 수 있는 노드들의 인덱스와 거리 초기화
+        for(int i = 0; i < graph.get(start).size(); i++){
+            d[graph.get(start).get(i).getIndex()] = graph.get(start).get(i).getDistance();
+        }
+        for(int i = 0; i < n - 1; i++){
+            int now = getSmallestNode();
+            visited[now] = true;
+            for(int j = 0; j < graph.get(now).size(); j++){
+                int cost = d[now] + graph.get(now).get(j).getDistance();
+                //현재 노드를 거쳐서 다음 노드로 가는 비용이 더 작을 경우
+                if(cost < d[graph.get(now).get(j).getIndex()]){
+                    d[graph.get(now).get(j).getIndex()] = cost;
+                }
+            }
+        }
+    }
+    public static void main(String[] args) throws IOException{
+        //노드 정보 입력
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer tk1 = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(tk1.nextToken());
+        m = Integer.parseInt(tk1.nextToken());
+        start = Integer.parseInt(tk1.nextToken());
+        for(int i = 0; i <= n; i++){
+            graph.add(new ArrayList<Node>());
+        }
+        Arrays.fill(d, INF);
+        for(int j = 0; j < m; j++){
+            System.out.print("시작 -> 목적지, 거리 : ");
+            tk1 = new StringTokenizer(br.readLine());
+            int start_idx = Integer.parseInt(tk1.nextToken());
+            int idx = Integer.parseInt(tk1.nextToken()); //i번 노드에서 갈 수 있는 노드의 인덱스
+            int distance = Integer.parseInt(tk1.nextToken()); //해당 노드까지의 거리
+            graph.get(start_idx).add(new Node(idx, distance));
+            System.out.println(start_idx + " " + idx + " " + distance);
+        }
+        br.close();
+        dijkstra(start);
+
+        for(int i = 1; i < n + 1; i++){
+            if(d[i] == INF){
+                System.out.println("불가능");
+            }
+            else{
+                System.out.println(start + "Node -> " + i + "번 Node까지의 최단거리 : " +  d[i]);
+            }
+        }
+    }
+}
